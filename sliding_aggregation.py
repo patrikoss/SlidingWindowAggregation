@@ -152,20 +152,8 @@ def calculate_window_sum(data, window_size, number_of_partitions):
     # calculate the window-sum for each element and associate the result with the rank of the element
     ranks_with_window = partial_elements.map(elements_summer(m,l,partition_weights)).flatMap(lambda x: x)
 
-    ### OUTPUT OPTION1: output the result in the form: rank, window-sum
+    # output the result in the form: rank, window-sum
     ranks_with_window = ranks_with_window.filter(lambda x: x[0] < n).map(lambda x: str(x[0]) + ' ' + str(x[1]))
-    ### END OPTION 1
-
-    ### OUTPUT OPTION2: output the result in the form: number, window-sum
-    #restore the original element based on the rank
-    #elements_with_window = ranks_with_window.join(sorted_data_with_number)
-
-    # store the result in the form of (number, window-sum) rather than (rank, (window-sum, (number, weight)))
-    #numbers_with_window = elements_with_window.map(lambda p: (p[1][1][0], p[1][0]) ).sortByKey()
-
-    # output result to file, output is of the form: (number, window-sum)
-    #numbers_with_window.map(lambda x: str(x[0]) + ' ' + str(x[1]) )
-    #END OPTION 2
 
     return ranks_with_window
 
